@@ -1,8 +1,9 @@
 [package]
-name = "hello-rust"
+name = "hello_rust"
 version = "0.1.0"
 authors = ["Ivaylo Novakov <inovakov@gmail.com>"]
 edition = "2018"
 
 [dependencies]
 rand = "0.7.3"
+hello_lib = { path = "../hello_lib", version = "0.1.0" }
