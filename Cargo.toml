@@ -6,4 +6,4 @@ edition = "2018"
 
 [dependencies]
 rand = "0.7.3"
-hello_lib = { path = "../hello_lib", version = "0.1.0" }
+hello_lib = { path = "hello_lib", version = "0.1.0" }

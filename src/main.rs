@@ -1,5 +1,7 @@
 #![allow(dead_code)]
 
+use hello_lib;
+
 mod guess;
 mod structs;
 
@@ -212,6 +214,9 @@ fn main() {
     // borrowing();
     // slices();
     structs();
+
+    // TODO How to properly build a library?
+    println!("{}", hello_lib::gcd(165, 35));
 
     structs::run();
 }
