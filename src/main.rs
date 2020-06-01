@@ -1,7 +1,36 @@
 #![allow(dead_code)]
 
+mod guess;
+mod structs;
+
+/// Returns "hello" <- docs for the following item (mind the triple slash).
 fn hello() -> &'static str {
-    &"hello"
+    //! Also returns a static string. <- docs for the containing item (mind the bang).
+    let greeting = "hello";
+    println!("{}", greeting);
+    &greeting
+}
+
+#[allow(unused_macros)]
+macro_rules! hi {
+    () => {
+        hello();
+    };
+}
+
+fn output() {
+    const PI: f64 = std::f64::consts::PI;
+    println!("Pi is roughly {:.2} or {}", PI, PI);
+
+    // multi-use params, positional params, named params:
+    println!(
+        "{0}, this is {b}. {b}, this is {0}. Emoji: {emoji}",
+        "Alice",
+        b = "Bob",
+        emoji = '\u{1F600}'
+    );
+    println!("Binary: {:b}, Hex: {:x}, Octal: {:o}", 2600, 2600, 2600);
+    println!("Tuple: {:?}", (3.14, "Mark"));
 }
 
 fn tuples() {
@@ -9,6 +38,36 @@ fn tuples() {
     tuple.0 = hello();
     let (_, pi, _) = tuple;
     println!("{:?}, {}", tuple.0, pi);
+}
+
+fn vars_loops_arrays_slices() {
+    for i in 0..=10 {
+        // inclusive range, 0..10 is exclusive
+        print!("{} ", i);
+    }
+    println!();
+
+    let (my_name, mut my_age) = ("Jack", 25); // multi-assign
+    my_age += 1;
+
+    let person: (&str, &str, u8) = (my_name, "Wyoming", my_age); // tuples
+    println!("{} lives in {} and is {}", person.0, person.1, person.2);
+
+    let arr: [i32; 5] = [1, 2, 3, 4, 5];
+    println!("arr is {:?} bytes", std::mem::size_of_val(&arr));
+
+    let slice: &[i32] = &arr[..2]; // [1..3], [1..]
+    println!("slice: {:?}", slice);
+
+    let mut v = vec![1, 2, 3, 4]; // optionally, you can let v: Vec<i32> = ...
+    v.push(7);
+    println!("vector: {:?}", v);
+
+    for i in v.iter_mut() {
+        *i = *i * 2;
+        print!("{:?} ", i);
+    }
+    println!();
 }
 
 fn arrays() -> [u8; 8] {
@@ -101,16 +160,58 @@ fn slices() {
 }
 
 fn structs() {
-    // this is a struct
+    #[derive(Debug)] // makes this printable by `fmt::Debug`: println!("{:?}", r)
+    pub struct Rect {
+        a: u32,
+        b: u32,
+        name: String,
+    }
+
+    impl Rect {
+        pub fn area(&self) -> u32 {
+            self.a * self.b
+        }
+
+        pub fn clone(&self) -> Rect {
+            Rect {
+                a: self.a,
+                b: self.b,
+                name: self.name.clone(), // clone is needed when the variable is on the heap
+            }
+        }
+    }
+
+    // A destructor. This needs to be in a separate section in order to be triggered on `drop`
+    impl Drop for Rect {
+        fn drop(&mut self) {
+            println!("Dropping Rect {}!", self.name);
+        }
+    }
+
+    let r = Rect {
+        a: 14,
+        b: 23,
+        name: String::from("yolo"),
+    };
+    println!(
+        "The area of a rectangle with sides {} and {} is {}",
+        r.a,
+        r.b,
+        r.area()
+    );
+    let q = r.clone();
+    println!("q is {:?}, p is {:?}", q, r);
 }
 
 fn main() {
-    tuples();
-    arrays();
-    loops();
-    copy_clone();
-    ownership();
-    borrowing();
-    slices();
+    // tuples();
+    // arrays();
+    // loops();
+    // copy_clone();
+    // ownership();
+    // borrowing();
+    // slices();
     structs();
+
+    structs::run();
 }
