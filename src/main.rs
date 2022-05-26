@@ -1,9 +1,37 @@
 #![allow(dead_code)]
 
-use hello_lib;
+// use hello_lib;
+
+use std::fmt::{Display, Formatter};
 
 mod guess;
 mod structs;
+
+struct BagOfHolding<T> {
+    item: Option<T>,
+}
+
+pub struct Point {
+    pub x: i32,
+    pub y: i32,
+}
+
+impl Display for Point {
+    fn fmt(&self, f: &mut Formatter<'_>) -> std::fmt::Result {
+        write!(f, "x: {}, y: {}", self.x, self.y)
+    }
+}
+
+struct Foo<'a> {
+    i: &'a Point,
+}
+
+/// Consumes a variable, making it unavailable in the code that follows.
+fn consume<T: Display>(a: T) {
+    match a {
+        _ => println!("consumed {}!", a),
+    }
+}
 
 /// Returns "hello" <- docs for the following item (mind the triple slash).
 fn hello() -> &'static str {
@@ -107,7 +135,8 @@ fn copy_clone() {
     let v = Vertex { x: 1.0, y: 2.0 };
     let w = v.clone();
     println!("{:?}", w);
-    String::from("foo");
+    let s = String::from("foo");
+    println!("{}", s);
 }
 
 fn ownership() {
@@ -205,6 +234,17 @@ fn structs() {
     println!("q is {:?}, p is {:?}", q, r);
 }
 
+fn matching() {
+    let n = 42;
+
+    match n {
+        x @ 42 => println!("expect 42: {}", x),
+        _ => {
+            println!("not x");
+        }
+    }
+}
+
 fn main() {
     // tuples();
     // arrays();
@@ -213,10 +253,30 @@ fn main() {
     // ownership();
     // borrowing();
     // slices();
-    structs();
+    // println!("{}", hello_lib::gcd(165, 35)); // TODO How to publish a lib as a crate?
+    // structs::run();
+    // structs(); // TODO Continue here in the Book of Rust.
+    // matching();
 
-    // TODO How to properly build a library?
-    println!("{}", hello_lib::gcd(165, 35));
+    scratch().unwrap();
+}
 
-    structs::run();
+fn do_something_that_might_fail(i: i32) -> Result<f32, String> {
+    if i == 42 {
+        Ok(-13.0)
+    } else {
+        Err(String::from("this is not the right number"))
+    }
+}
+fn foo(x: Point) {
+    println!("{}", x);
+}
+
+fn scratch() -> Result<(), String> {
+    let p = Point { x: 1, y: 2 };
+
+    foo(p);
+
+    println!("{}", p);
+    Ok(())
 }
