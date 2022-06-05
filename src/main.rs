@@ -7,6 +7,8 @@ use std::fmt::{Display, Formatter};
 mod guess;
 mod structs;
 
+const CRAB: &str = "🦀";
+
 struct BagOfHolding<T> {
     item: Option<T>,
 }
@@ -245,6 +247,26 @@ fn matching() {
     }
 }
 
+fn unsafe_play_with_bytes() {
+    let mut n: u16 = (1 << 10) + (1 << 2); // 1024 + 4
+    println!("n is {:?}", n);
+    let p = &mut n as *mut u16 as usize;
+    println!("p is  {:?}", p);
+    // point to the second byte, i.e. 4
+    let p2 = p + 1;
+    println!("p2 is {:?}", p2);
+    // grab the value of the second byte into a var
+    let mut x: u8 = unsafe { *(p2 as *mut u8) };
+    println!("x is {}", x);
+    // check that the 4 is stored in new memory
+    println!("&x is {:?}", (&mut x as *mut u8 as usize));
+    // increment the second byte with 2, i.e. 1<<1. since this is little endian,
+    // this will result in n being incremented with 1<<(1+8), i.e. 512.
+    unsafe { *(p2 as *mut u8) += 2 };
+    // n should be 1024 + 4 + 512 = 1540
+    println!("n is {:?}", n);
+}
+
 fn main() {
     // tuples();
     // arrays();
@@ -257,26 +279,5 @@ fn main() {
     // structs::run();
     // structs(); // TODO Continue here in the Book of Rust.
     // matching();
-
-    scratch().unwrap();
-}
-
-fn do_something_that_might_fail(i: i32) -> Result<f32, String> {
-    if i == 42 {
-        Ok(-13.0)
-    } else {
-        Err(String::from("this is not the right number"))
-    }
-}
-fn foo(x: Point) {
-    println!("{}", x);
-}
-
-fn scratch() -> Result<(), String> {
-    let p = Point { x: 1, y: 2 };
-
-    foo(p);
-
-    println!("{}", p);
-    Ok(())
+    unsafe_play_with_bytes();
 }
