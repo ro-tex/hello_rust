@@ -4,8 +4,15 @@
 
 use std::fmt::{Display, Formatter};
 
+use rand::random;
+
+use crate::heap::Heap;
+
 mod guess;
-mod structs;
+mod heap;
+mod skylink;
+mod structs; // imports all entities exported by skylink.rs
+             // Example: let s = [0u8; 46] as skylink::Skylink;
 
 const CRAB: &str = "🦀";
 
@@ -62,7 +69,7 @@ fn output() {
         emoji = '\u{1F600}'
     );
     println!("Binary: {:b}, Hex: {:x}, Octal: {:o}", 2600, 2600, 2600);
-    println!("Tuple: {:?}", (3.14, "Mark"));
+    println!("Tuple: {:?}", (2.26, "Mark"));
 }
 
 fn tuples() {
@@ -267,6 +274,19 @@ fn unsafe_play_with_bytes() {
     println!("n is {:?}", n);
 }
 
+fn heap() {
+    let mut h = heap::MaxHeap::new();
+    for _ in 1..10 {
+        h.push(random());
+        h.push(random());
+        println!("{:?}", h.pop().unwrap());
+    }
+    for _ in 1..10 {
+        println!("{:?}", h.pop().unwrap());
+    }
+    // println!("{:?}", h)
+}
+
 fn main() {
     // tuples();
     // arrays();
@@ -279,5 +299,8 @@ fn main() {
     // structs::run();
     // structs(); // TODO Continue here in the Book of Rust.
     // matching();
-    unsafe_play_with_bytes();
+    // unsafe_play_with_bytes();
+    heap();
+
+    println!()
 }
