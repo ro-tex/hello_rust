@@ -47,10 +47,13 @@ impl MaxHeap {
     }
 
     fn heapify_down(&mut self, index: usize) {
+        if self.next == 0 {
+            return;
+        }
         let mut idx = index;
         loop {
             let mut larger_child = 2 * idx + 1; // assume left child is larger
-            if larger_child >= self.next {
+            if larger_child >= self.next - 1 {
                 // there can be no right child, we're done here
                 return;
             }
@@ -70,13 +73,32 @@ impl MaxHeap {
     }
 }
 
+/**
+USE_MORE_MEM allows us to make a tradeoff between speed and memory usage.
+
+When USE_MORE_MEM is set to false, we'll truncate the heap vector each time we
+pop an element off the heap. This will keep memory usage down but will involve
+more allocations in case we later need to regrow the vector to its previous size
+but the adjacent memory is no longer available. In that case the entire vector
+will need to be reallocated.
+
+When USE_MORE_MEM is true we won't truncate it. This will reduce the number of
+memory operations we do but our heap will no longer return memory to the OS.
+*/
+const USE_MORE_MEM: bool = false;
+
 impl Heap for MaxHeap {
     fn push(&mut self, n: i32) {
-        if self.heap.len() <= self.next {
-            self.heap.push(n);
+        if USE_MORE_MEM {
+            if self.heap.len() <= self.next {
+                self.heap.push(n);
+            } else {
+                self.heap[self.next] = n;
+            }
         } else {
-            self.heap[self.next] = n;
+            self.heap.push(n);
         }
+
         self.next += 1;
         self.heapify_up(self.next - 1);
     }
@@ -84,9 +106,13 @@ impl Heap for MaxHeap {
         let n = *self.heap.first()?;
         self.heap[0] = self.heap[self.next - 1];
         // If we want to free memory we can uncomment the following and change
-        // push() to always do self.heap.push().
-        // self.heap.resize(self.next, 0);
+        // push() to always do self.heap.push(). This is slower but it uses
+        // less memory.
         self.next -= 1;
+        if !USE_MORE_MEM {
+            self.heap.truncate(self.next);
+        }
+        // println!(">>> next is {}", self.next);
         self.heapify_down(0);
         Some(n)
     }

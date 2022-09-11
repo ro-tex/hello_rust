@@ -278,8 +278,6 @@ fn heap() {
     let mut h = heap::MaxHeap::new();
     for _ in 1..10 {
         h.push(random());
-        h.push(random());
-        println!("{:?}", h.pop().unwrap());
     }
     for _ in 1..10 {
         println!("{:?}", h.pop().unwrap());
