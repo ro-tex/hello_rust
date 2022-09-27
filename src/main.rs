@@ -298,7 +298,7 @@ fn main() {
     // structs(); // TODO Continue here in the Book of Rust.
     // matching();
     // unsafe_play_with_bytes();
-    heap();
+    // heap();
 
-    println!()
+    println!("yubi")
 }
