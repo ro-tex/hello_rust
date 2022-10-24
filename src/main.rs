@@ -1,7 +1,5 @@
 #![allow(dead_code)]
 
-// use hello_lib;
-
 use std::fmt::{Display, Formatter};
 
 use rand::random;
@@ -13,6 +11,7 @@ mod heap;
 mod skylink;
 mod structs; // imports all entities exported by skylink.rs
              // Example: let s = [0u8; 46] as skylink::Skylink;
+mod scratch; // Random experiments.
 
 const CRAB: &str = "🦀";
 
@@ -300,5 +299,5 @@ fn main() {
     // unsafe_play_with_bytes();
     // heap();
 
-    println!("yubi")
+    scratch::main();
 }
