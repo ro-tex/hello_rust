@@ -1,3 +1,5 @@
+// use crate::   //gcd::gcd_bin_a;
+
 #[cfg(test)]
 mod tests {
     #[test]
@@ -6,17 +8,19 @@ mod tests {
     }
 }
 
-// TODO How to expose the funcs from the other files of the library?
+// Q: How to access functions from another file?
+// A: Define it as a module.
+mod gcd;
+
+// TODO Q: How to expose the funcs from the other files of the library?
+//      A: Add wrappers?
 
 /// Returns the GCD based on Euclid's algorithm.
-pub fn gcd(a: u64, b: u64) -> u64 {
-    let (mut x, mut y) = (a, b);
-    while x != 0 && y != 0 {
-        if x > y {
-            x = x - y
-        } else {
-            y = y - x
-        }
-    }
-    return if x == 0 { y } else { x };
+pub fn gcd_euclid(a: u64, b: u64) -> u64 {
+    gcd::gcd_euclid(a, b)
+}
+
+/// Returns the GCD based on the Binary GCD algorithm.
+pub fn gcd_bin(a: u64, b: u64) -> u64 {
+    gcd::gcd_bin(a, b)
 }

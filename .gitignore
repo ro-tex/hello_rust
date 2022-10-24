@@ -1,3 +1,5 @@
 /target
 main
-/.idea/
+/.idea
+/.vscode
+.DS_Store

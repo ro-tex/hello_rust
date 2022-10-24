@@ -1,5 +1,5 @@
 // https://en.wikipedia.org/wiki/Euclidean_algorithm
-fn gcd_euclid(a: u64, b: u64) -> u64 {
+pub fn gcd_euclid(a: u64, b: u64) -> u64 {
     let (mut x, mut y) = (a, b);
     while x != 0 && y != 0 {
         if x > y {
@@ -12,7 +12,7 @@ fn gcd_euclid(a: u64, b: u64) -> u64 {
 }
 
 // https://en.wikipedia.org/wiki/Binary_GCD_algorithm
-fn gcd_bin(a: u64, b: u64) -> u64 {
+pub fn gcd_bin(a: u64, b: u64) -> u64 {
     let (mut x, mut y) = (a, b);
     let mut gcd = 1;
     while x != 0 && y != 0 {
