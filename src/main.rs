@@ -11,6 +11,7 @@ mod heap;
 mod skylink;
 mod structs; // imports all entities exported by skylink.rs
              // Example: let s = [0u8; 46] as skylink::Skylink;
+mod futures;
 mod scratch; // Random experiments.
 
 const CRAB: &str = "🦀";
@@ -284,7 +285,8 @@ fn heap() {
     // println!("{:?}", h)
 }
 
-fn main() {
+#[tokio::main]
+async fn main() {
     // tuples();
     // arrays();
     // loops();
@@ -298,6 +300,7 @@ fn main() {
     // matching();
     // unsafe_play_with_bytes();
     // heap();
+    // futures::run_async().await;
 
     scratch::main();
 }
